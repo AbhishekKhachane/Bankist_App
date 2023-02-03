@@ -86,3 +86,31 @@ const displayMovements = function (movements) {
 };
 
 displayMovements(account1.movements);
+
+// Calculate the balance and display
+const calcDisplayBalance = function (movements) {
+  // acc -> accumulator
+  const balance = movements.reduce((acc, curr) => {
+    return acc + curr;
+  }, 0);
+
+  // Display on screen
+  labelBalance.textContent = `${balance}€`;
+};
+
+calcDisplayBalance(account1.movements);
+
+// Create username for the users
+const createUserNames = function (accs) {
+  accs.forEach((acc) => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(" ")
+      .map((element) => {
+        return element[0];
+      })
+      .join("");
+  });
+};
+
+createUserNames(accounts);
