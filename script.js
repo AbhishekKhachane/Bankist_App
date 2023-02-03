@@ -20,7 +20,7 @@ const account2 = {
 };
 
 const account3 = {
-  owner: "Om Chimampure",
+  owner: "Om Chimanpure",
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
@@ -61,14 +61,40 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-const currencies = new Map([
-  ["USD", "United States dollar"],
-  ["EUR", "Euro"],
-  ["GBP", "Pound sterling"],
-]);
+// DISPLAY MOVEMENTS
+const displayMovements = function (movements) {
+  // First clear the container and then insert
+  containerMovements.innerHTML = "";
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+  movements.forEach(function (mov, i) {
+    // Calculate type whether deposit or withdrawal
+    const type = mov > 0 ? "deposit" : "withdrawal";
 
+    // Html template
+    const html = `
+      <div class="movements__row">
+        <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
+        <div class="movements__value">${mov}</div>
+      </div>
+    `;
+
+    // Insert the HTML in movements element
+    containerMovements.insertAdjacentHTML("afterbegin", html);
+  });
+};
+
+displayMovements(account1.movements);
+
+// CONCEPT of for-of and forEach Loop
+// const currencies = new Map([
+//   ["USD", "United States dollar"],
+//   ["EUR", "Euro"],
+//   ["GBP", "Pound sterling"],
+// ]);
+
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 // for-of Loop ----> Array
 // for (const movement of movements) {
 //   if (movement > 0) {
