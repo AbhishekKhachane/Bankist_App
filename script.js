@@ -114,3 +114,4 @@ const createUserNames = function (accs) {
 };
 
 createUserNames(accounts);
+
