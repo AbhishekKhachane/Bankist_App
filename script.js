@@ -61,7 +61,7 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-// DISPLAY MOVEMENTS
+// Display Movements
 const displayMovements = function (movements) {
   // First clear the container and then insert
   containerMovements.innerHTML = "";
@@ -76,7 +76,7 @@ const displayMovements = function (movements) {
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}</div>
+        <div class="movements__value">${mov}€</div>
       </div>
     `;
 
@@ -100,6 +100,53 @@ const calcDisplayBalance = function (movements) {
 
 calcDisplayBalance(account1.movements);
 
+// Display Summary
+const calcDisplaySummary = function (movements) {
+  // Incomes -----------------------------------------------
+  const incomes = movements
+    .filter((mov) => {
+      return mov > 0;
+    })
+    .reduce((acc, mov) => {
+      return acc + mov;
+    }, 0);
+
+  // Display on screen
+  labelSumIn.textContent = `${incomes}€`;
+
+  // Out -----------------------------------------------
+  const out = movements
+    .filter((mov) => {
+      return mov < 0;
+    })
+    .reduce((acc, mov) => {
+      return acc + mov;
+    }, 0);
+
+  // Display on screen
+  labelSumOut.textContent = `${Math.abs(out)}€`;
+
+  // Interest -----------------------------------------------
+  const interest = movements
+    .filter((mov) => {
+      return mov > 0;
+    })
+    .map((deposit) => {
+      return (deposit * 1.2) / 100;
+    })
+    .filter((int, i, arr) => {
+      return int > 1;
+    })
+    .reduce((acc, int) => {
+      return acc + int;
+    }, 0);
+
+  // Display on screen
+  labelSumInterest.textContent = `${interest}€`;
+};
+
+calcDisplaySummary(account1.movements);
+
 // Create username for the users
 const createUserNames = function (accs) {
   accs.forEach((acc) => {
@@ -114,4 +161,3 @@ const createUserNames = function (accs) {
 };
 
 createUserNames(accounts);
-
