@@ -4,7 +4,7 @@
 // BANKIST APP
 /////////////////////////////////////////////////
 
-// Data
+// *********** DATA *************
 const account1 = {
   owner: "Abhi Khachane",
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
@@ -35,7 +35,7 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
-// Elements
+// ************* ELEMENTS *************
 const labelWelcome = document.querySelector(".welcome");
 const labelDate = document.querySelector(".date");
 const labelBalance = document.querySelector(".balance__value");
@@ -61,7 +61,7 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-// Display Movements
+// ************* DISPLAY MOVEMENTS *************
 const displayMovements = function (movements) {
   // First clear the container and then insert
   containerMovements.innerHTML = "";
@@ -87,7 +87,7 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
-// Calculate the balance and display
+// ************* CALCULATE THE BALANCE AND DISPLAY *************
 const calcDisplayBalance = function (movements) {
   // acc -> accumulator
   const balance = movements.reduce((acc, curr) => {
@@ -100,7 +100,7 @@ const calcDisplayBalance = function (movements) {
 
 calcDisplayBalance(account1.movements);
 
-// Display Summary
+// ************* DISPLAY SUMMARY *************
 const calcDisplaySummary = function (movements) {
   // Incomes -----------------------------------------------
   const incomes = movements
@@ -147,7 +147,7 @@ const calcDisplaySummary = function (movements) {
 
 calcDisplaySummary(account1.movements);
 
-// Create username for the users
+// ************* CREATE USERNAME FOR THE USERS *************
 const createUserNames = function (accs) {
   accs.forEach((acc) => {
     acc.username = acc.owner
@@ -161,3 +161,5 @@ const createUserNames = function (accs) {
 };
 
 createUserNames(accounts);
+
+
