@@ -86,14 +86,14 @@ const displayMovements = function (movements) {
 };
 
 // ************* CALCULATE THE BALANCE AND DISPLAY *************
-const calcDisplayBalance = function (movements) {
+const calcDisplayBalance = function (account) {
   // acc -> accumulator
-  const balance = movements.reduce((acc, curr) => {
+  account.balance = account.movements.reduce((acc, curr) => {
     return acc + curr;
   }, 0);
 
   // Display on screen
-  labelBalance.textContent = `${balance}€`;
+  labelBalance.textContent = `${account.balance}€`;
 };
 
 // ************* DISPLAY SUMMARY *************
@@ -156,6 +156,18 @@ const createUserNames = function (accs) {
 
 createUserNames(accounts);
 
+// Update UI
+const updateUI = function (acc) {
+  // Display movements
+  displayMovements(acc.movements);
+
+  // Display balance
+  calcDisplayBalance(acc);
+
+  // Display summary
+  calcDisplaySummary(acc);
+};
+
 // EVENT HANDLERS
 let currentAccount;
 
@@ -180,17 +192,39 @@ btnLogin.addEventListener("click", function (event) {
     // Add Opacity to display
     containerApp.style.opacity = 100;
     // Clear input fields
-    inputLoginUsername.value = inputLoginPin.value = " ";
+    inputLoginUsername.value = inputLoginPin.value = "";
     // Clear the focus from the pin button
     inputLoginPin.blur();
 
-    // Display movements
-    displayMovements(currentAccount.movements);
+    updateUI(currentAccount);
+  }
+});
 
-    // Display balance
-    calcDisplayBalance(currentAccount.movements);
+// ***************** TRANSFER FUNCTION *****************
+btnTransfer.addEventListener("click", function (e) {
+  e.preventDefault();
 
-    // Display summary
-    calcDisplaySummary(currentAccount);
+  const receiverAcc = accounts.find((acc) => {
+    return acc.username === inputTransferTo.value;
+  });
+
+  const amount = Number(inputTransferAmount.value);
+
+  // Clear the fields
+  inputTransferAmount.value = inputTransferTo.value = "";
+
+  // Check whether amount is valid and less than the available balance and we should not be able to transfer to our own acc
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    amount <= currentAccount.balance &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    // Doing the transfer
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+
+    // Update UI
+    updateUI(currentAccount);
   }
 });
