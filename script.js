@@ -136,6 +136,14 @@ const formatMovementDate = function (date, locale) {
   return new Intl.DateTimeFormat(locale).format(date);
 };
 
+// Format Currency
+const formatCur = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(value);
+};
+
 // ************* DISPLAY MOVEMENTS *************
 const displayMovements = function (account, sort = false) {
   // First clear the container and then insert
@@ -153,6 +161,8 @@ const displayMovements = function (account, sort = false) {
     const date = new Date(account.movementsDates[i]);
     const displayDate = formatMovementDate(date, account.locale);
 
+    const formattedMov = formatCur(mov, account.locale, account.currency);
+
     // Html template
     const html = `
       <div class="movements__row">
@@ -161,7 +171,7 @@ const displayMovements = function (account, sort = false) {
     } ${type}</div>
         <div class="movements__date">${displayDate}</div>
 
-        <div class="movements__value">${mov.toFixed(2)}€</div>
+        <div class="movements__value">${formattedMov}</div>
       </div>
     `;
 
@@ -178,7 +188,11 @@ const calcDisplayBalance = function (account) {
   }, 0);
 
   // Display on screen
-  labelBalance.textContent = `${account.balance.toFixed(2)}€`;
+  labelBalance.textContent = formatCur(
+    account.balance,
+    account.locale,
+    account.currency
+  );
 };
 
 // ************* DISPLAY SUMMARY *************
@@ -193,7 +207,7 @@ const calcDisplaySummary = function (account) {
     }, 0);
 
   // Display on screen
-  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  labelSumIn.textContent = formatCur(incomes, account.locale, account.currency);
 
   // Out -----------------------------------------------
   const out = account.movements
@@ -205,7 +219,11 @@ const calcDisplaySummary = function (account) {
     }, 0);
 
   // Display on screen
-  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
+  labelSumOut.textContent = formatCur(
+    Math.abs(out),
+    account.locale,
+    account.currency
+  );
 
   // Interest -----------------------------------------------
   const interest = account.movements
@@ -223,7 +241,11 @@ const calcDisplaySummary = function (account) {
     }, 0);
 
   // Display on screen
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = formatCur(
+    interest,
+    account.locale,
+    account.currency
+  );
 };
 
 // ************* CREATE USERNAME FOR THE USERS *************
