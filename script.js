@@ -275,13 +275,45 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+// TIME COUNTER
+const startLogOutTimer = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+
+    // In each call, print remaining time
+    labelTimer.textContent = `${min}:${sec}`;
+
+    // when 0 sec, stop timer and logout
+    if (time === 0) {
+      clearInterval(timer);
+
+      // Hide UI and logout user
+      labelWelcome.textContent = `Log in to get started`;
+      containerApp.style.opacity = 0;
+    }
+
+    // Decrease 1 sec
+    time--;
+  };
+  // Setting the time to 5 mins
+  let time = 300;
+
+  // Call timer every sec
+  tick();
+  const timer = setInterval(tick, 1000);
+
+  return timer;
+};
+
 // EVENT HANDLERS
 let currentAccount;
+let timer;
 
 // FAKE ALWAYS LOGGED IN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 // ***************** LOGIN FUNCTION *****************
 
@@ -333,6 +365,11 @@ btnLogin.addEventListener("click", function (event) {
     // Clear the focus from the pin button
     inputLoginPin.blur();
 
+    // Timer
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
+
+    // Update UI
     updateUI(currentAccount);
   }
 });
@@ -367,6 +404,10 @@ btnTransfer.addEventListener("click", function (e) {
 
     // Update UI
     updateUI(currentAccount);
+
+    // Reset the Timer
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -392,6 +433,10 @@ btnLoan.addEventListener("click", function (e) {
       updateUI(currentAccount);
     }, 3000);
   }
+
+  // Reset the Timer
+  clearInterval(timer);
+  timer = startLogOutTimer();
 
   inputLoanAmount.value = "";
 });
@@ -425,5 +470,3 @@ btnSort.addEventListener("click", function (e) {
   displayMovements(currentAccount, !sortedState);
   sortedState = !sortedState;
 });
-
-
